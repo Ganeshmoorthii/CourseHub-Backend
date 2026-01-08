@@ -10,7 +10,7 @@ namespace CourseHub.Domain.Entities
 
         [Required]
         [MaxLength(200)]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;  //4
         
         [MaxLength(1000)]
         public string? Bio { get; set; }

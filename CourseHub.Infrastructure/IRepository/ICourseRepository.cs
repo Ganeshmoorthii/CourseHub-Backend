@@ -12,5 +12,6 @@ namespace CourseHub.Infrastructure.IRepository
         public Task AddCourseAsync(Course course);
         public Task<bool> ExistsAsync(Guid courseId);
         public Task<bool> ExistsByTitleAsync(string title);
+        public Task<IEnumerable<Course>> GetCourses(int page, int pageSize);
     }
 }

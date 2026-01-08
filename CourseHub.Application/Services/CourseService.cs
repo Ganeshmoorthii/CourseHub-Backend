@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CourseHub.Application.DTOs.Request;
+using CourseHub.Application.DTOs.Response;
 using CourseHub.Application.Exceptions;
 using CourseHub.Application.IServices;
 using CourseHub.Domain.Entities;
@@ -19,6 +20,16 @@ namespace CourseHub.Application.Services
             _courseRepository = courseRepository;
             _mapper = mapper;
         }
+
+        public async Task<IEnumerable<CourseInfoDTO>> GetCoursesAsync(int page, int pageSize)
+        {
+            if (page <= 0 || pageSize <= 0)
+                throw new ValidationException("Page and pageSize must be greater than zero.");
+
+            var courses = await _courseRepository.GetCourses(page, pageSize);
+            return _mapper.Map<IEnumerable<CourseInfoDTO>>(courses);
+        }
+
 
         public async Task CreateCourseAsync(CreateCourseRequestDTO courseRequestDTO)
         {

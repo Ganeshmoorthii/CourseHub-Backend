@@ -14,12 +14,12 @@ namespace CourseHub.Domain.Entities
 
         [Required]
         [MaxLength(200)]
-        public string UserName { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty; //1
 
         [Required]
         [MaxLength(200)]
         [EmailAddress]
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;  //2
 
         [Required]
         [MaxLength(200)]

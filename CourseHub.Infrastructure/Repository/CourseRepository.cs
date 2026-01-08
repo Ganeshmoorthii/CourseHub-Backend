@@ -1,11 +1,8 @@
-﻿using CourseHub.Infrastructure.Data;
+﻿using CourseHub.Domain.Entities;
+using CourseHub.Infrastructure.Data;
 using CourseHub.Infrastructure.IRepository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseHub.Infrastructure.Repository
 {
@@ -38,6 +35,15 @@ namespace CourseHub.Infrastructure.Repository
             _logger.LogInformation("ExistsAsync method called in CourseRepository.");
             var exists = await Task.FromResult(_dbContext.Courses.Any(c => c.Title == title));
             return exists;
+        }
+
+        public async Task<IEnumerable<Course>> GetCourses(int page, int pageSize)
+        {
+            return await _dbContext.Courses
+                .OrderBy(c => c.Title)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

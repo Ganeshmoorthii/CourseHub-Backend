@@ -17,7 +17,7 @@ namespace CourseHub.Domain.Entities
         public Guid CourseId { get; set; }
         public Course? Course { get; set; }
 
-        public DateTime EnrolledAt { get; set; }
+        public DateTime EnrolledAt { get; set; }  //5 (from , to)
 
         [MaxLength(50)]
         public string Status { get; set; } = "Active";

@@ -1,7 +1,7 @@
 using AutoMapper;
 using CourseHub.API.Middleware;
 using CourseHub.Application.IServices;
-using CourseHub.Application.MappingProfiles;
+using CourseHub.Application.Profiles;
 using CourseHub.Application.Services;
 using CourseHub.Infrastructure.Data;
 using CourseHub.Infrastructure.IRepository;
@@ -16,20 +16,19 @@ builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+//builder.Services.AddScoped<ISearchRepository, SearchRepository>();
 
 builder.Services.AddScoped<IInstructorService, InstructorService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
-builder.Services.AddScoped<ISearchService, SearchService>();
+//builder.Services.AddScoped<ISearchService, SearchService>();
 
 //// ... rest of your code remains unchanged
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
-builder.Services.AddAutoMapper(typeof(CourseMappingProfile).Assembly);
-
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 
 builder.Services.AddControllers();

@@ -12,6 +12,8 @@ namespace CourseHub.Application.Contracts
         public string Message { get; init; } = string.Empty;
         public T? Data { get; init; }
 
+        //status code
+
         public static ApiResponse<T> Ok(T data, string message = "Request successful")
             => new() { Success = true, Message = message, Data = data };
 
