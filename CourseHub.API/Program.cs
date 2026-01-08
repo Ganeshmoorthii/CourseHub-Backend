@@ -1,4 +1,5 @@
 using AutoMapper;
+using CourseHub.API.Middleware;
 using CourseHub.Application.IServices;
 using CourseHub.Application.MappingProfiles;
 using CourseHub.Application.Services;
@@ -28,6 +29,8 @@ builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
 builder.Services.AddAutoMapper(typeof(CourseMappingProfile).Assembly);
 
+
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -36,7 +39,9 @@ builder.Services.AddDbContext<CourseHubDbContext>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Global exception handler.
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

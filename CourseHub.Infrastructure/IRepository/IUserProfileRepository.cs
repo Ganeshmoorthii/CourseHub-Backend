@@ -10,5 +10,7 @@ namespace CourseHub.Infrastructure.IRepository
     public interface IUserProfileRepository
     {
         public Task CreateUserProfile(UserProfile userProfile);
+        public Task<bool> ExistsByUserIdAsync(Guid userId);
+
     }
 }

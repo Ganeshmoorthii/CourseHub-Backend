@@ -26,5 +26,12 @@ namespace CourseHub.Infrastructure.Repository
             await _dbContext.UserProfiles.AddAsync(userProfile);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsByUserIdAsync(Guid userId)
+        {
+            _logger.LogInformation("ExistsByUserIdAsync in the Repository Layer.");
+            var exists = await Task.FromResult(_dbContext.UserProfiles.Any(c => c.Id == userId));
+            return exists;
+        }
     }
 }

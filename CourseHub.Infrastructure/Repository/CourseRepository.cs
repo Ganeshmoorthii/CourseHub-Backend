@@ -32,5 +32,12 @@ namespace CourseHub.Infrastructure.Repository
             _logger.LogInformation($"Course existence check completed: {exists}");
             return exists;
         }
+
+        public async Task<bool> ExistsByTitleAsync(string title)
+        {
+            _logger.LogInformation("ExistsAsync method called in CourseRepository.");
+            var exists = await Task.FromResult(_dbContext.Courses.Any(c => c.Title == title));
+            return exists;
+        }
     }
 }

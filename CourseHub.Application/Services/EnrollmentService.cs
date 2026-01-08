@@ -1,25 +1,22 @@
 ﻿using CourseHub.Application.DTOs.Request;
+using CourseHub.Application.Exceptions;
 using CourseHub.Application.IServices;
 using CourseHub.Domain.Entities;
 using CourseHub.Infrastructure.IRepository;
-using Microsoft.Extensions.Logging;
 
 namespace CourseHub.Application.Services
 {
     public class EnrollmentService : IEnrollmentService
     {
-        private readonly ILogger<EnrollmentService> _logger;
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICourseRepository _courseRepository;
 
         public EnrollmentService(
-            ILogger<EnrollmentService> logger,
             IEnrollmentRepository enrollmentRepository,
             IUserRepository userRepository,
             ICourseRepository courseRepository)
         {
-            _logger = logger;
             _enrollmentRepository = enrollmentRepository;
             _userRepository = userRepository;
             _courseRepository = courseRepository;
@@ -27,16 +24,22 @@ namespace CourseHub.Application.Services
 
         public async Task CreateEnrollmentAsync(CreateEnrollmentRequestDTO dto)
         {
-            _logger.LogInformation("Enrollment started");
+            if (dto == null)
+                throw new ValidationException("Enrollment request cannot be null.");
 
-            if (!await _userRepository.ExistsAsync(dto.UserId))
-                throw new Exception("User not found");
+            var userExists = await _userRepository.ExistsAsync(dto.UserId);
+            if (!userExists)
+                throw new NotFoundException("User", dto.UserId);
 
-            if (!await _courseRepository.ExistsAsync(dto.CourseId))
-                throw new Exception("Course not found");
+            var courseExists = await _courseRepository.ExistsAsync(dto.CourseId);
+            if (!courseExists)
+                throw new NotFoundException("Course", dto.CourseId);
 
-            if (await _enrollmentRepository.ExistsAsync(dto.UserId, dto.CourseId))
-                throw new Exception("User already enrolled in this course");
+            var alreadyEnrolled =
+                await _enrollmentRepository.ExistsAsync(dto.UserId, dto.CourseId);
+
+            if (alreadyEnrolled)
+                throw new ConflictException("User is already enrolled in this course.");
 
             var enrollment = new Enrollment
             {
@@ -47,8 +50,6 @@ namespace CourseHub.Application.Services
             };
 
             await _enrollmentRepository.AddAsync(enrollment);
-
-            _logger.LogInformation("Enrollment completed successfully");
         }
     }
 }
