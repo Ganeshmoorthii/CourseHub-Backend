@@ -1,4 +1,7 @@
-﻿using CourseHub.Application.IServices;
+﻿using CourseHub.API.Contracts;
+using CourseHub.Application.Contracts;
+using CourseHub.Application.DTOs.Response;
+using CourseHub.Application.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,11 +28,13 @@ namespace CourseHub.API.Controllers
         /// <response code="400">Validation failed (custom exception handled globally)</response>
         /// <response code="404">Resource not found (custom exception handled globally)</response>
         [HttpGet("{userId}")]
+        [ProducesResponseType(typeof(ApiResponse<UserSearchDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> SearchUserDetails(Guid userId)
         {
             _logger.LogInformation("SearchCoursesByUserId method called in SearchController.");
             var result = await _searchService.SearchUserDetailsAsync(userId);
-            return Ok(result);
+            return Ok(ApiResponse<UserSearchDTO>.Ok(result));
         }
     }
 }

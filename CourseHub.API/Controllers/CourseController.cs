@@ -1,4 +1,6 @@
-﻿using CourseHub.Application.DTOs.Request;
+﻿using CourseHub.API.Contracts;
+using CourseHub.Application.Contracts;
+using CourseHub.Application.DTOs.Request;
 using CourseHub.Application.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +24,17 @@ namespace CourseHub.API.Controllers
         /// </summary>
         /// <param name="dto">Course creation DTO</param>
         /// <returns>Created course</returns>
-        /// <response code="200">Course created successfully</response>
+        /// <response code="201">Course created successfully</response>
         /// <response code="400">Validation failed (custom exception handled globally)</response>
         /// <response code="404">Resource not found (custom exception handled globally)</response>
         [HttpPost]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequestDTO courseRequestDTO)
         {
             _logger.LogInformation("CreateCourse endpoint called.");
             await _courseService.CreateCourseAsync(courseRequestDTO);
-            return Ok("Course created successfully.");
+            return Created(string.Empty, ApiResponse<object>.Created(null, "Course created successfully"));
         }
     }
 }
