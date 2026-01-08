@@ -16,13 +16,14 @@ builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-//builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+builder.Services.AddScoped<ISearchRepository, SearchRepository>();
 
 builder.Services.AddScoped<IInstructorService, InstructorService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
-//// Add this using directive
+builder.Services.AddScoped<ISearchService, SearchService>();
 
 //// ... rest of your code remains unchanged
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();

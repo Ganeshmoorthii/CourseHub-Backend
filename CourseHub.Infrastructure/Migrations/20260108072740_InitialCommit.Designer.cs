@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseHub.Infrastructure.Migrations
 {
     [DbContext(typeof(CourseHubDbContext))]
-    [Migration("20260107141604_InitialCommit")]
+    [Migration("20260108072740_InitialCommit")]
     partial class InitialCommit
     {
         /// <inheritdoc />
@@ -140,8 +140,8 @@ namespace CourseHub.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

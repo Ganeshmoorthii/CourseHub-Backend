@@ -16,7 +16,7 @@ namespace CourseHub.Domain.Entities
         public string? Bio { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
 
         public User? User { get; set; }
         public Guid UserId { get; set; }
