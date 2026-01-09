@@ -8,11 +8,7 @@
         public int TotalCount { get; init; }
         public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
 
-        public PagedResult(
-            IReadOnlyList<T> items,
-            int totalCount,
-            int page,
-            int pageSize)
+        public PagedResult(IReadOnlyList<T> items, int totalCount, int page, int pageSize)
         {
             Items = items;
             TotalCount = totalCount;

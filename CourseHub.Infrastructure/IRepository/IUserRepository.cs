@@ -9,7 +9,6 @@ namespace CourseHub.Infrastructure.IRepository
         Task<bool> ExistsAsync(Guid userId);
         Task<User?> GetUserWithProfileAndEnrollmentsAsync(Guid userId);
 
-        Task<(List<User> Users, int TotalCount)> SearchUsersAsync(
-            UserSearchRequestDTO request);
+        Task<(List<User> Users, int TotalCount)> SearchUsersAsync(UserSearchRequestDTO request);
     }
 }

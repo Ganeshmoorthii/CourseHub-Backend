@@ -33,8 +33,7 @@ public class UserService : IUserService
         await _userRepository.AddUserAsync(user);
     }
 
-    public async Task<PagedResult<UserSearchDTO>> SearchUsersAsync(
-     UserSearchRequestDTO request)
+    public async Task<PagedResult<UserSearchDTO>> SearchUsersAsync(UserSearchRequestDTO request)
     {
         if (request.Page <= 0 || request.PageSize <= 0)
             throw new ValidationException("Invalid pagination values.");
@@ -44,7 +43,7 @@ public class UserService : IUserService
 
         var items = users.Select(user => new UserSearchDTO
         {
-            Id = user.Id,
+            //Id = user.Id,
             UserName = user.UserName,
             Email = user.Email,
             Profile = user.Profile == null ? null : new UserProfileInfoDTO
