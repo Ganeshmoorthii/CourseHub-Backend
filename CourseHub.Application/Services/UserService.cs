@@ -38,8 +38,7 @@ public class UserService : IUserService
         if (request.Page <= 0 || request.PageSize <= 0)
             throw new ValidationException("Invalid pagination values.");
 
-        var (users, totalCount) =
-            await _userRepository.SearchUsersAsync(request);
+        var (users, totalCount) = await _userRepository.SearchUsersAsync(request);
 
         var items = users.Select(user => new UserSearchDTO
         {

@@ -3,6 +3,7 @@ using CourseHub.Application.Contracts;
 using CourseHub.Application.DTOs.Request;
 using CourseHub.Application.DTOs.Response;
 using CourseHub.Application.IServices;
+using CourseHub.Domain.DTOs.Request;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -64,8 +65,34 @@ namespace CourseHub.API.Controllers
         {
             _logger.LogInformation("CreateCourse endpoint called.");
             await _courseService.CreateCourseAsync(courseRequestDTO);
-            return Created(string.Empty, ApiResponse<object>.Created(null, "Course created successfully"));
+            return Created(
+                string.Empty, 
+                ApiResponse<object>.Created(
+                    null, "Course created successfully"
+                )
+            );
         }
 
+        /// <summary>
+        /// Search a Courses by complex Filters
+        /// </summary>
+        /// <param name="dto">Course Search Dto</param>
+        /// <returns>Searched Courses</returns>
+        /// <response code="200">Course is Display</response>
+        /// <response code="404">Course Not Found</response>
+        [HttpPost("search")]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> SearchCourses([FromBody] CourseSearchRequestDTO searchCoursesDTO)
+        {
+            _logger.LogInformation("Search Course by complex filters. Currently in Controller");
+            var result = await _courseService.SearchCourseAsync(searchCoursesDTO);
+            return Ok(
+                ApiResponse<PagedResult<SearchCoursesDTO>>.Ok(
+                    result,
+                    "Courses Retrieved Successfully."
+                )
+            );
+        }
     }
 }

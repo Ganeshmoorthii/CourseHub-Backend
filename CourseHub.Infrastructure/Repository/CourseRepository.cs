@@ -1,4 +1,5 @@
-﻿using CourseHub.Domain.Entities;
+﻿using CourseHub.Domain.DTOs.Request;
+using CourseHub.Domain.Entities;
 using CourseHub.Infrastructure.Data;
 using CourseHub.Infrastructure.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,55 @@ namespace CourseHub.Infrastructure.Repository
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+        }
+
+        public async Task<(List<Course> Courses, int TotalCount)> SearchCourseAsync(CourseSearchRequestDTO dto)
+        {
+            var query = _dbContext.Courses
+                .Include(c => c.Instructor)
+                .AsQueryable();
+            if(dto.Id.HasValue)
+            {
+                query = query.Where(c => c.Id == dto.Id.Value);
+            }
+            if (!string.IsNullOrWhiteSpace(dto.Title))
+            {
+                query = query.Where(c => c.Title.Contains(dto.Title));
+            }
+            if (dto.PriceFrom.HasValue)
+            {
+                query = query.Where(c =>
+                    c.Price >= dto.PriceFrom.Value
+                );
+            }
+            if (dto.PriceTo.HasValue)
+            {
+                query = query.Where(c => c.Price <= dto.PriceTo.Value);
+            }
+            if(!string.IsNullOrWhiteSpace(dto.InstructorName))
+            {
+                query = query.Where(c => c.Instructor.Name.Contains(dto.InstructorName));
+            }
+            if(dto.EnrolledFrom.HasValue)
+            {
+                query = query.Where(c =>
+                    c.Enrollments.Any(e => e.EnrolledAt >= dto.EnrolledFrom.Value)
+                );
+            }
+            if(dto.EnrolledTo.HasValue)
+            {
+                query = query.Where(c =>
+                    c.Enrollments.Any(e => e.EnrolledAt <= dto.EnrolledTo.Value)
+                );
+            }
+            var totalCount = await query.CountAsync();
+            var courses = await query
+                .OrderBy(c => c.Title)
+                .Skip((dto.Page - 1) * dto.PageSize)
+                .Take(dto.PageSize)
+                .ToListAsync();
+            return (courses, totalCount);
+
         }
     }
 }

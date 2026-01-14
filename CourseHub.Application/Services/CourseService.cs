@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using CourseHub.Application.Contracts;
 using CourseHub.Application.DTOs.Request;
 using CourseHub.Application.DTOs.Response;
 using CourseHub.Application.Exceptions;
 using CourseHub.Application.IServices;
+using CourseHub.Domain.DTOs.Request;
 using CourseHub.Domain.Entities;
 using CourseHub.Infrastructure.IRepository;
 
@@ -45,6 +47,34 @@ namespace CourseHub.Application.Services
 
             var courseEntity = _mapper.Map<Course>(courseRequestDTO);
             await _courseRepository.AddCourseAsync(courseEntity);
+        }
+
+        public async Task<PagedResult<SearchCoursesDTO>> SearchCourseAsync(CourseSearchRequestDTO dto)
+        {
+            if (dto.Page <= 0 || dto.PageSize <= 0)
+            {
+                throw new ValidationException("Invalid Pagination values.");
+            }
+            var (courses, totalCount) = await _courseRepository.SearchCourseAsync(dto);
+            var items = courses.Select(course => new SearchCoursesDTO
+            {
+                Title = course.Title,
+                Description = course.Description,
+                Price = course.Price,
+                InstructorInfo = course.Instructor == null ? null : new InstructorInfoDTO
+                {
+                    Name = course.Instructor.Name,
+                    Bio = course.Instructor.Bio
+                }
+            }).ToList();
+
+            return new PagedResult<SearchCoursesDTO>
+            (
+                items,
+                totalCount,
+                dto.Page,
+                dto.PageSize
+            );
         }
     }
 }

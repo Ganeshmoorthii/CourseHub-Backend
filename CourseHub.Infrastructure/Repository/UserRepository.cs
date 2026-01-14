@@ -12,11 +12,15 @@ public class UserRepository : IUserRepository
 
     public UserRepository(CourseHubDbContext dbContext)
     {
-        _dbContext = dbContext;
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
     public async Task AddUserAsync(User newUser)
     {
+        if(newUser == null)
+        {
+            throw new ArgumentNullException(nameof(User));
+        }
         await _dbContext.Users.AddAsync(newUser);
         await _dbContext.SaveChangesAsync();
     }

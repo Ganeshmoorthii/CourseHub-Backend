@@ -1,16 +1,19 @@
-﻿namespace CourseHub.Application.Contracts
+﻿using System;
+using System.Collections.Generic;
+
+namespace CourseHub.Application.Contracts
 {
     public class PagedResult<T>
     {
-        public IReadOnlyList<T> Items { get; init; } = new List<T>();
+        public IReadOnlyList<T> Items { get; init; }
+        public int TotalCount { get; init; }
         public int Page { get; init; }
         public int PageSize { get; init; }
-        public int TotalCount { get; init; }
-        public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+        public int TotalPages => PageSize == 0 ? 0 : (int)Math.Ceiling(TotalCount / (double)PageSize);
 
         public PagedResult(IReadOnlyList<T> items, int totalCount, int page, int pageSize)
         {
-            Items = items;
+            Items = items ?? Array.Empty<T>();
             TotalCount = totalCount;
             Page = page;
             PageSize = pageSize;
