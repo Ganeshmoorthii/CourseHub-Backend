@@ -36,19 +36,12 @@ namespace CourseHub.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<CourseInfoDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCourses(int page = 1, int pageSize = 10)
+        public async Task<ApiResponse<IEnumerable<CourseInfoDTO>>> GetCourses(int page = 1, int pageSize = 10)
         {
             var courses = await _courseService.GetCoursesAsync(page, pageSize);
 
-            return Ok(
-                ApiResponse<IEnumerable<CourseInfoDTO>>.Ok(
-                    courses,
-                    "Courses fetched successfully"
-                )
-            );
+            return ApiResponse<IEnumerable<CourseInfoDTO>>.Ok( courses, "Courses fetched successfully" );
         }
-
-
 
         /// <summary>
         /// Create a new course
@@ -61,16 +54,11 @@ namespace CourseHub.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequestDTO courseRequestDTO)
+        public async Task<ApiResponse<object>> CreateCourse([FromBody] CreateCourseRequestDTO courseRequestDTO)
         {
             _logger.LogInformation("CreateCourse endpoint called.");
             await _courseService.CreateCourseAsync(courseRequestDTO);
-            return Created(
-                string.Empty, 
-                ApiResponse<object>.Created(
-                    null, "Course created successfully"
-                )
-            );
+            return ApiResponse<object>.Created( null, "Course created successfully" );
         }
 
         /// <summary>
@@ -83,16 +71,11 @@ namespace CourseHub.API.Controllers
         [HttpPost("search")]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> SearchCourses([FromBody] CourseSearchRequestDTO searchCoursesDTO)
+        public async Task<ApiResponse<PagedResult<SearchCoursesDTO>>> SearchCourses([FromBody] CourseSearchRequestDTO searchCoursesDTO)
         {
             _logger.LogInformation("Search Course by complex filters. Currently in Controller");
             var result = await _courseService.SearchCourseAsync(searchCoursesDTO);
-            return Ok(
-                ApiResponse<PagedResult<SearchCoursesDTO>>.Ok(
-                    result,
-                    "Courses Retrieved Successfully."
-                )
-            );
+            return ApiResponse<PagedResult<SearchCoursesDTO>>.Ok( result, "Courses Retrieved Successfully." );    
         }
     }
 }

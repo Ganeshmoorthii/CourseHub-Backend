@@ -33,11 +33,11 @@ namespace CourseHub.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEnrollment(CreateEnrollmentRequestDTO dto)
+        public async Task<ApiResponse<object>> CreateEnrollment(CreateEnrollmentRequestDTO dto)
         {
             _logger.LogInformation("CreateEnrollment endpoint called.");
             await _enrollment.CreateEnrollmentAsync(dto);
-            return Created(string.Empty, ApiResponse<object>.Created(null, "Course Enrollment created successfully")); 
+            return ApiResponse<object>.Created(null, "Course Enrollment created successfully"); 
         }
     }
 }

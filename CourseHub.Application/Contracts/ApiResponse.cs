@@ -8,17 +8,17 @@ namespace CourseHub.Application.Contracts
 {
     public class ApiResponse<T>
     {
-        public bool Success { get; init; }
+        public int StatusCode { get; init; }
         public string Message { get; init; } = string.Empty;
         public T? Data { get; init; }
 
         //status code
 
         public static ApiResponse<T> Ok(T data, string message = "Request successful")
-            => new() { Success = true, Message = message, Data = data };
+            => new() { StatusCode = 200, Message = message, Data = data };
 
         public static ApiResponse<T> Created(T data, string message = "Resource created")
-            => new() { Success = true, Message = message, Data = data };
+            => new() { StatusCode = 201, Message = message, Data = data };
     }
 
 }

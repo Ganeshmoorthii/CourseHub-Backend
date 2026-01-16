@@ -32,11 +32,11 @@ namespace CourseHub.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateUserProfile(CreateUserProfileDTO dto)
+        public async Task<ApiResponse<object>> CreateUserProfile(CreateUserProfileDTO dto)
         {
             _logger.LogInformation("CreateUserProfile endpoint called.");
             await _userProfileService.CreateUserProfileAsync(dto);
-            return Created(string.Empty, ApiResponse<object>.Created(null, "User Profile created successfully"));
+            return ApiResponse<object>.Created(null, "User Profile created successfully");
         }
     }
 }

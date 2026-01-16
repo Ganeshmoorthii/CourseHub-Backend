@@ -35,16 +35,13 @@ namespace CourseHub.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO dto)
+        public async Task<ApiResponse<object>> CreateUser([FromBody] CreateUserRequestDTO dto)
         {
             _logger.LogInformation("CreateUser endpoint called.");
 
             await _userService.CreateUserAsync(dto);
 
-            return Created(
-                string.Empty,
-                ApiResponse<object>.Created(null, "User created successfully")
-            );
+            return ApiResponse<object>.Created(null, "User created successfully");
         }
 
         /// <summary>
@@ -57,18 +54,13 @@ namespace CourseHub.API.Controllers
         [HttpPost("search")]
         [ProducesResponseType(typeof(ApiResponse<PagedResult<UserSearchDTO>>),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SearchUsers([FromBody] UserSearchRequestDTO request)
+        public async Task<ApiResponse<PagedResult<UserSearchDTO>>> SearchUsers([FromBody] UserSearchRequestDTO request)
         {
             _logger.LogInformation("SearchUsers endpoint called.");
 
             var result = await _userService.SearchUsersAsync(request);
 
-            return Ok(
-                ApiResponse<PagedResult<UserSearchDTO>>.Ok(
-                    result,
-                    "Users retrieved successfully"
-                )
-            );
+            return ApiResponse<PagedResult<UserSearchDTO>>.Ok(result,"Users retrieved successfully");
         }
     }
 }

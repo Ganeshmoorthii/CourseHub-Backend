@@ -32,11 +32,11 @@ namespace CourseHub.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateInstructor(CreateInstructorRequestDTO dto)
+        public async Task<ApiResponse<object>> CreateInstructor(CreateInstructorRequestDTO dto)
         {
             _logger.LogInformation("CreateInstructor endpoint called.");
             await _instructorService.CreateInstructorAsync(dto);
-            return Created(string.Empty, ApiResponse<object>.Created(null,"Instructor created successfully"));
+            return ApiResponse<object>.Created(null,"Instructor created successfully");
         }
     }
 }
